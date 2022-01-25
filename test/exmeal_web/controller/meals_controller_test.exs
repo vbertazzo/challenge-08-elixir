@@ -132,10 +132,37 @@ defmodule Exmeal.MealsControllerTest do
 
       response =
         conn
-        |> get(Routes.meals_path(conn, :update, id))
+        |> get(Routes.meals_path(conn, :show, id))
         |> json_response(:not_found)
 
       assert %{"message" => "Meal not found"} = response
+    end
+
+    test "return all meals", %{conn: conn} do
+      params = %{description: "Banana", date: "2001-05-02", calories: "20"}
+
+      {:ok, _meal} = Exmeal.create_meal(params)
+      {:ok, _meal} = Exmeal.create_meal(params)
+
+      response =
+        conn
+        |> get(Routes.meals_path(conn, :index))
+        |> json_response(:ok)
+
+      assert %{
+               "meals" => [
+                 %{
+                   "calories" => 20,
+                   "date" => "2001-05-02",
+                   "description" => "Banana"
+                 },
+                 %{
+                   "calories" => 20,
+                   "date" => "2001-05-02",
+                   "description" => "Banana"
+                 }
+               ]
+             } = response
     end
   end
 end

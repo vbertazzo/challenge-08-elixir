@@ -41,4 +41,29 @@ defmodule ExmealWeb.MealsViewTest do
              }
            } = response
   end
+
+  test "render index.json" do
+    params = %{description: "Banana", date: "2001-05-02", calories: "20"}
+    {_ok, meal1} = Exmeal.create_meal(params)
+    {_ok, meal2} = Exmeal.create_meal(params)
+
+    meals = [meal1, meal2]
+
+    response = render(MealsView, "index.json", meals: meals)
+
+    assert %{
+             meals: [
+               %Meal{
+                 calories: 20,
+                 date: ~D[2001-05-02],
+                 description: "Banana"
+               },
+               %Meal{
+                 calories: 20,
+                 date: ~D[2001-05-02],
+                 description: "Banana"
+               }
+             ]
+           } = response
+  end
 end
