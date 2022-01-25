@@ -19,6 +19,17 @@ defmodule Exmeal.Meal do
   def changeset(params) do
     %__MODULE__{}
     |> cast(params, @required_params)
+    |> validate_params()
+  end
+
+  def changeset(struct, params) do
+    struct
+    |> cast(params, @required_params)
+    |> validate_params()
+  end
+
+  defp validate_params(struct) do
+    struct
     |> validate_required(@required_params)
     |> validate_number(:calories, greater_than_or_equal_to: 0)
   end
