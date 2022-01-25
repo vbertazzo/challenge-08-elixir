@@ -28,4 +28,12 @@ defmodule ExmealWeb.MealsController do
       |> render("index.json", meals: meals)
     end
   end
+
+  def delete(conn, %{"id" => id}) do
+    with {:ok, %Meal{}} <- Exmeal.delete_meal(id) do
+      conn
+      |> put_status(:no_content)
+      |> text("")
+    end
+  end
 end
